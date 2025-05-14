@@ -28,24 +28,74 @@ employee_contacts = [
     ("Steve Turner", 37, "stevet@example.com", "222-444-6666")
 ]
 # Create the contacts table
-cursor.execute("""
-    CREATE TABLE IF NOT EXISTS contacts (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        age INTEGER NOT NULL,
-        email TEXT NOT NULL,
-        phone TEXT NOT NULL
-    )
- """)
+# cursor.execute("""
+#     CREATE TABLE IF NOT EXISTS contacts (
+#         id INTEGER PRIMARY KEY AUTOINCREMENT,
+#         name TEXT NOT NULL,
+#         age INTEGER NOT NULL,
+#         email TEXT NOT NULL UNIQUE, 
+#         phone TEXT NOT NULL UNIQUE
+#     )
+#  """)
 
-conn.commit()
-# Insert sample data into the contacts table
-cursor.executemany("""
-    INSERT INTO contacts
-    (name, age, email, phone)
-    VALUES (?, ?, ?, ?) 
- """, employee_contacts)
-conn.commit()
+
+# # Insert sample data into the contacts table
+# cursor.executemany("""
+#     INSERT INTO contacts
+#     (name, age, email, phone)
+#     VALUES (?, ?, ?, ?) 
+#  """, employee_contacts)
+# conn.commit()
+
+# # Query the contacts table
+# cursor.execute("SELECT * FROM contacts")
+# rows = cursor.fetchall()
+# for row in rows:
+#     print(row)
+
+
+# # Finding contacts containing the letters 'LI'
+# cursor.execute("SELECT * FROM contacts WHERE name LIke '%li%'")
+# rows =cursor.fetchall()
+# for row in rows:
+#     print(row)
+
+# Updating a contacts
+# getting the contact id to update
+# email_to_update = "bobbrown@example.com"
+# cursor.execute("SELECT id FROM contacts WHERE email = ?", (email_to_update,))
+# result = cursor.fetchone()
+
+# if result:
+#     contact_id = result[0]
+#     cursor.execute("""
+#      UPDATE contacts
+#      SET email = ?
+#      WHERE id = ?              
+#     """, ("bob_bob@nonatll.com", contact_id))
+#     conn.commit()
+#     print(f"Contact with ID {contact_id} updated successfully.")
+#     cursor.execute("SELECT * FROM contacts WHERE id = ?", (contact_id,))
+#     updated_contact = cursor.fetchone() 
+#     if updated_contact:
+#         print("Updated contact:", updated_contact)
+#     else:
+#         print("User not found.")
+# else:
+#     print("Contact not found.")
+
+# Deleting a contact
+email_of_contact_to_delete = "miak@example.com"
+cursor.execute("SELECT id FROM contacts WHERE email = ?", (email_of_contact_to_delete,))
+result = cursor.fetchone()
+
+if result: 
+    contact_id = result[0]
+    cursor.execute("DELETE FROM contacts WHERE id = ?", (contact_id,))
+    conn.commit()
+    print(f"Contact with ID {contact_id} deleted successfully.")
+else:
+    print("Contact not found.")
 
 #closing the connection
 cursor.close()
